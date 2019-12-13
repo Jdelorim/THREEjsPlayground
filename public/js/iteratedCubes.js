@@ -17,10 +17,7 @@ window.addEventListener( 'resize', onWindowResize, false );
      controls = new THREE.OrbitControls( camera, renderer.domElement);
      
     const cubeMat = new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load('textures/brickTex.png'), side: THREE.FrontSide } );
-
- 
-   
-    const mat = new THREE.MeshLambertMaterial({map: new THREE.TextureLoader().load('textures/brickTex.png'), side: THREE.FrontSide } );
+    const mat = new THREE.MeshLambertMaterial({map: new THREE.TextureLoader().load('textures/metalTexCompressed.png'), side: THREE.FrontSide } );
     const spreadX = -6;
     const spreadR = 500;
     let h;
@@ -31,10 +28,10 @@ window.addEventListener( 'resize', onWindowResize, false );
         this.c.position.x = ((Math.random()-0.5)*spreadR);
         this.c.position.y = ((Math.random()-0.5)*spreadR);
         this.c.position.z = ((Math.random()-0.5)*spreadR);
-        
     } 
-    var count = 8000;
-    var cubeHolder = [];
+
+    const count = 8000;
+    const cubeHolder = [];
     for(var i =0;i<count;i++) {
         cubeHolder.push(new MyCube(spreadR));
         scene.add(cubeHolder[i].c);
@@ -60,13 +57,13 @@ window.addEventListener( 'resize', onWindowResize, false );
     
      speed2 = speed2 + 1;
     
-    for(var i=0;i<count;i++) {
+    for(let i=0;i<count;i++) {
        cubeHolder[i].c.rotation.y+=(i*speed)/1000;
        cubeHolder[i].c.rotation.z+=(i*speed)/1000;
        cubeHolder[i].c.rotation.x+=(i*speed)/1000;
     }
     
-    var ani = ((Math.sin(speed2/2)+0.5)+0.5)*2.5;
+    const ani = ((Math.sin(speed2/2)+0.5)+0.5)*2.5;
     light3.intensity = ani;
     }
 
