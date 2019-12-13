@@ -1,4 +1,4 @@
-console.log('hi');
+console.log('thanks for looking at my demo!');
 const scene = new THREE.Scene();
 var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 var renderer = new THREE.WebGLRenderer();
@@ -11,93 +11,73 @@ const onWindowResize = () => {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
 }
+
 window.addEventListener( 'resize', onWindowResize, false );
 
      controls = new THREE.OrbitControls( camera, renderer.domElement);
      
-     console.log(controls);
-    //create shape
-    
-    // var cubeMat =  
-    // [
-    // new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load('textures/brickTex.png'), side: THREE.DoubleSide } ),
-    // new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load('textures/brickTex.png'), side: THREE.DoubleSide } ),
-    // new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load('textures/brickTex.png'), side: THREE.DoubleSide } ),
-    // new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load('textures/brickTex.png'), side: THREE.DoubleSide } ),
-    // new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load('textures/brickTex.png'), side: THREE.DoubleSide } ),
-    // new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load('textures/brickTex.png'), side: THREE.DoubleSide } ),
-    
-    // ]
-    var cubeMat = new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load('textures/brickTex.png'), side: THREE.FrontSide } );
+    const cubeMat = new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load('textures/brickTex.png'), side: THREE.FrontSide } );
 
-    //create material or color or tex
-    //for each face individual use array cubMat
+ 
    
-    var mat = new THREE.MeshFaceMaterial(cubeMat);
-    var spreadX = -6;
-    var spreadR = 500;
+    const mat = new THREE.MeshLambertMaterial({map: new THREE.TextureLoader().load('textures/brickTex.png'), side: THREE.FrontSide } );
+    const spreadX = -6;
+    const spreadR = 500;
     let h;
+ 
 
     function MyCube(spreadR) {
-        this.c =  new THREE.Mesh((new THREE.BoxGeometry(4,4,4,1,1,1)),cubeMat);
+        this.c =  new THREE.Mesh((new THREE.BoxBufferGeometry(4,4,4,1,1,1)),mat);
         this.c.position.x = ((Math.random()-0.5)*spreadR);
         this.c.position.y = ((Math.random()-0.5)*spreadR);
         this.c.position.z = ((Math.random()-0.5)*spreadR);
         
     } 
-    var count = 10000;
-
-//     for(var i =0; i< 5000; i++) {
-//         var cube = new THREE.Mesh(geometry, mat);
-//         cube.position.x = ((Math.random()-0.5)*spreadR);
-//         cube.position.y = ((Math.random()-0.5)*spreadR);
-//         cube.position.z = ((Math.random()-0.5)*spreadR); 
-//         cube.rotation.x += ((Math.random()-0.5)*360);  
-   
-//         h = Math.round((Math.random() * 255)).toString();
-//         scene.add(cube);
-//         spreadX += 2;
-//    }
+    var count = 8000;
     var cubeHolder = [];
     for(var i =0;i<count;i++) {
         cubeHolder.push(new MyCube(spreadR));
         scene.add(cubeHolder[i].c);
     }
   
-   var c = `rgb(${h},255,255)`;
-  // var mat = new THREE.MeshBasicMaterial({color: c, wireframe: false});
+    camera.position.z = 614;
    
-    //camera is at origin so move to see the cube
-    camera.position.z = 100;
-   // cube.position.z = -100;
+   const light1 = new THREE.PointLight('rgb(255,200,255)',8,900);
+   const light2 = new THREE.PointLight('rgb(100,200,255)',8,900);
+   const light3 = new THREE.PointLight( 'rgb(63,140,133)',4,300);
     
-    var r = [];
-    for(var i =0;i<count;i++) {
-        r.push = Math.random();
-        
-    }
-    console.log('---'+r);
-    //game logic
+
+    light1.position.set(-900,0,0);
+    light2.position.set(900,0,0);
+    light3.position.set(0,0,0);
+    scene.add(light1);
+    scene.add(light2);
+    scene.add(light3);
+    let speed2 =0;
+    let speed = 0.022;
+
     const update = () => {
-    let speed = 0.02;
+    
+     speed2 = speed2 + 1;
     
     for(var i=0;i<count;i++) {
        cubeHolder[i].c.rotation.y+=(i*speed)/1000;
        cubeHolder[i].c.rotation.z+=(i*speed)/1000;
        cubeHolder[i].c.rotation.x+=(i*speed)/1000;
     }
-       
-   
+    
+    var ani = ((Math.sin(speed2/2)+0.5)+0.5)*2.5;
+    light3.intensity = ani;
     }
 
     const render = () => {
         renderer.render( scene, camera );
     };
 
-    const GameLoop = () => {
-        requestAnimationFrame( GameLoop );
+    const Loop = () => {
+        requestAnimationFrame( Loop );
         update();
         render();
-    }
+    };
 
-    GameLoop();
+    Loop();
