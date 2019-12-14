@@ -9,18 +9,22 @@ canvas {
 
 .userDisplay {
     margin-left: 30px;
-    margin-top: 50px;
+    margin-top: 60px;
     position: absolute;
     color: rgba(255,255,255,0.5);
     z-index: 10;
     text-align: center;
 }
-#stats {
-
+#Stats {
+    position: absolute;
+    margin-left: 30px;
+    margin-top: 10px;
+    width: 80px;
+    height: 48px;
 }
 #mouse{
     position: absolute;
-    margin-top: 65px;
+    margin-top: 75px;
     margin-left: 30px;
     color: rgba(255,255,255,0.5);
 }

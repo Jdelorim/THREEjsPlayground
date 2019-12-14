@@ -1,60 +1,15 @@
+'use strict'
 console.log('thanks for looking at my demo!');
 //FPS
-(()=>{
-    const script=document.createElement('script');
-    script.onload=()=>{
-        const stats=new Stats();
-        document.getElementById('stats').appendChild(stats.dom);
-        requestAnimationFrame(loop=()=>{
-            stats.update();
-            requestAnimationFrame(loop);
-        });
-    };
-        script.src='//mrdoob.github.io/stats.js/build/stats.min.js';
-        document.head.appendChild(script);
-    })()
-//
-
-
-// let synth;
-
-
-    
-//         Tone.start();
-   
-//         synth = new Tone.Synth().toDestination();
-//         function onkeydown(){
-//             Tone.context.resume().then(()=>{
-//                 synth.triggerAttackRelease('C4', Tone.context.currentTime);
-//             })
-//         }
-//         function onkeyup(){
-//             Tone.context.resume().then(()=>{
-//                 synth.triggerRelease('C4',0);
-//             })
-            
-//         }
-
-
-
-// window.addEventListener('keydown', this.onkeydown);
-// window.addEventListener('keyup', this.onkeyup);
-// document.querySelector('#button').addEventListener('click', () => Tone.start())
-
-
-
+const stats = new Stats();
+document.body.appendChild( stats.domElement ); 
 
 const scene = new THREE.Scene();
 var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
-var renderer = new THREE.WebGLRenderer();
+var renderer = new THREE.WebGLRenderer({antialias: true});
 
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement ); 
-const userDisplay = () => {
-    const id = document.getElementById('userInfo');
-    id.innerText = `Cube Count: ${count}`;
-}
-
 
 const onWindowResize = () => {
     renderer.setSize( window.innerWidth, window.innerHeight );
@@ -62,10 +17,14 @@ const onWindowResize = () => {
     camera.updateProjectionMatrix();
 }
 
+const userDisplay = () => {
+    const id = document.getElementById('userInfo');
+    id.innerText = `Cube Count: ${count}`;
+}
+
 window.addEventListener( 'resize', onWindowResize, false );
 
-     controls = new THREE.OrbitControls( camera, renderer.domElement);
-     
+    const controls = new THREE.OrbitControls( camera, renderer.domElement);
     const cubeMat = new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load('textures/brickTex.png'), side: THREE.FrontSide } );
     const mat = new THREE.MeshLambertMaterial({map: new THREE.TextureLoader().load('textures/metalTex.png'), side: THREE.FrontSide } );
     const spreadX = -6;
@@ -103,32 +62,85 @@ window.addEventListener( 'resize', onWindowResize, false );
     scene.add(light1);
     scene.add(light2);
     scene.add(light3);
-    let speed2 =0;
+    let speed2 = 0;
     let speed = 0.022;
     //update
-    const update = () => {
-    
-     speed2 = speed2 + 1;
-    
-    for(let i=0;i<count;i++) {
-       cubeHolder[i].c.rotation.y+=(i*speed)/1000;
-       cubeHolder[i].c.rotation.z+=(i*speed)/1000;
-       cubeHolder[i].c.rotation.x+=(i*speed)/1000;
-    }
-    const sin = Math.sin(speed2/8);
-    const ani = map(sin,-1.0,1.0,0,6);
-    light3.intensity = ani;
 
-    }
     /////////////////////////////
+
+    //post processing
+    // const myEffect ={
+    //     uniforms: {
+    //         'tDiffuse': { value: null},
+    //         'amount': { value: 0.0 }
+    //     },
+    //     vertexShader: [
+    //         `varying vec2 vUv;`,
+    //         `void main() {`,
+    //         `vUv = uv;`,
+    //         `gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);`,
+    //         `}`
+    //     ].join("\n"),
+    //     fragmentShader: [
+    //         `uniform float amount;`,
+    //         'uniform sampler2D tDiffuse;',
+    //         'varying vec2 vUv;',
+    //         `void main() {`,
+    //             `vec4 color = texture2D( tDiffuse, vUv );`,
+    //             `vec3 c = color.rgb;`,
+    //             `color.r = c.r * 2.0;`,
+    //             `color.g = c.g + amount;`,
+    //             `color.b = c.b;`,
+    //             `gl_FragColor = vec4( color.rgb, color.a );`,
+    //         `}`
+    //     ].join("\n")
+    // }
+
+    const composer = new THREE.EffectComposer(renderer);
+    const renderPass = new THREE.RenderPass(scene, camera);
+    composer.addPass(renderPass);
+    
+    const pass1 = new THREE.ShaderPass(THREE.SepiaShader);
+    //composer.addPass(pass1);
+
+    const pass2 = new THREE.GlitchPass(20);
+   // composer.addPass(pass2);
+
+    const pass3 = new THREE.ShaderPass(THREE.BadTVShader);
+    //composer.addPass(pass3);
+   
+    const bloomPass = new THREE.UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight),2, 1,0.8);
+	composer.addPass(bloomPass);
+
+
+    bloomPass.renderToScreen = true;
     
     const render = () => {
-        renderer.render( scene, camera );
+        //renderer.render( scene, camera );
+        composer.render();
     };
+    const update = () => {
+    
+        speed2 = speed2 + 1;
+       
+       for(let i=0;i<count;i++) {
+          cubeHolder[i].c.rotation.y+=(i*speed)/1000;
+          cubeHolder[i].c.rotation.z+=(i*speed)/1000;
+          cubeHolder[i].c.rotation.x+=(i*speed)/1000;
+       }
+       const sin = Math.sin(speed2/8);
+       const ani = map(sin,-1.0,1.0,0,6);
+       light3.intensity = ani;
+
+    //    pass3.uniforms.distortion.value += 0.000001;
+    //    pass3.uniforms.distortion2.value += 0.01;
+    
+    }
 
     const Loop = () => {
         requestAnimationFrame( Loop );
         update();
+        stats.update(); 
         render();
     };
     userDisplay();
