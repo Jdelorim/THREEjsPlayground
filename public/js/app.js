@@ -1,4 +1,18 @@
 console.log('hi');
+//FPS
+(()=>{
+    const script=document.createElement('script');
+    script.onload=()=>{
+        const stats=new Stats();
+        document.body.appendChild(stats.dom);
+        requestAnimationFrame(loop=()=>{
+            stats.update();
+            requestAnimationFrame(loop);
+        });
+    };
+        script.src='//mrdoob.github.io/stats.js/build/stats.min.js';
+        document.head.appendChild(script);
+    })()
 const scene = new THREE.Scene();
 var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 var renderer = new THREE.WebGLRenderer({antialias: true});
@@ -16,6 +30,9 @@ window.addEventListener( 'resize', onWindowResize, false );
      controls = new THREE.OrbitControls( camera, renderer.domElement);
      
      
+   
+   
+   
     //create shape
     var geometry = new THREE.BoxBufferGeometry(4,4,4,1,1,1);
     // var cubeMat =  
@@ -65,9 +82,11 @@ window.addEventListener( 'resize', onWindowResize, false );
 
     //game logic
     const update = () => {
+    
         cube.rotation.x += 0.02;
         cube.rotation.y += 0.01;
         cube.rotation.z += 0.005;
+     
     }
 
     const render = () => {
