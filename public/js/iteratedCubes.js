@@ -1,5 +1,6 @@
 'use strict'
 console.log('thanks for looking at my demo!');
+
 //FPS
 const stats = new Stats();
 document.body.appendChild( stats.domElement ); 
@@ -9,7 +10,11 @@ var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHe
 var renderer = new THREE.WebGLRenderer({antialias: true});
 
 renderer.setSize( window.innerWidth, window.innerHeight );
-document.body.appendChild( renderer.domElement ); 
+renderer.physicallyCorrectLights = true;
+renderer.shadowMap.enabled = true;
+renderer.vr.enabled = true;
+// document.body.appendChild( renderer.domElement ); 
+document.body.appendChild( VRButton.createButton( renderer ) );
 
 const onWindowResize = () => {
     renderer.setSize( window.innerWidth, window.innerHeight );
@@ -48,7 +53,7 @@ window.addEventListener( 'resize', onWindowResize, false );
         scene.add(cubeHolder[i].c);
     }
     
-    
+   
     camera.position.set(57,-1,58);
     camera.rotation.set(-1,1,9);
     
@@ -108,17 +113,19 @@ window.addEventListener( 'resize', onWindowResize, false );
 
     const pass3 = new THREE.ShaderPass(THREE.BadTVShader);
     //composer.addPass(pass3);
-   
-    const bloomPass = new THREE.UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight),2, 1,0.8);
+   //strength(0-5),threshold(0 or 1),  
+    const bloomPass = new THREE.UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight),0.3, 0.5, 0.1);
 	composer.addPass(bloomPass);
 
 
     bloomPass.renderToScreen = true;
     
+
     const render = () => {
         //renderer.render( scene, camera );
         composer.render();
     };
+
     const update = () => {
     
         speed2 = speed2 + 1;
@@ -138,7 +145,8 @@ window.addEventListener( 'resize', onWindowResize, false );
     }
 
     const Loop = () => {
-        requestAnimationFrame( Loop );
+        // requestAnimationFrame( Loop );
+        renderer.setAnimationLoop( Loop );
         update();
         stats.update(); 
         render();
