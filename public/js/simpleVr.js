@@ -30,8 +30,8 @@ const main = () => {
        shininess: 20, //default is 30
     });
     // const cube = new THREE.Mesh(jbox,jmat);
-    const spread = 800;
-    const count = 10000;
+    const spread = 400;
+    const count = 5000;
     class MyCube {
         constructor(spread) {
             this.c =  new THREE.Mesh((new THREE.BoxBufferGeometry(4,4,4,1,1,1)),jmat);
