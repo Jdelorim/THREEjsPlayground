@@ -30,8 +30,8 @@ const main = () => {
        shininess: 20, //default is 30
     });
     // const cube = new THREE.Mesh(jbox,jmat);
-    const spread = 200;
-    const count = 1000;
+    const spread = 800;
+    const count = 10000;
     class MyCube {
         constructor(spread) {
             this.c =  new THREE.Mesh((new THREE.BoxBufferGeometry(4,4,4,1,1,1)),jmat);
@@ -64,8 +64,8 @@ const animate = () => {
    renderer.setAnimationLoop( function () {
       speed= speed+1;
        for(let i =0;i<count;i++) {
-        cubeHolder[i].c.rotation.x += (i*0.04)/500;
-        cubeHolder[i].c.rotation.y += (i*.05/2)/500;
+        cubeHolder[i].c.rotation.x += (i*0.04)/2000;
+        cubeHolder[i].c.rotation.y += (i*.05/2)/2000;
        }
        light2.intensity = map(Math.sin(speed),-1,1,0,2);
     //    console.log(light2.intensity);
