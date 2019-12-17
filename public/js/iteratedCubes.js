@@ -12,9 +12,9 @@ var renderer = new THREE.WebGLRenderer({antialias: true});
 renderer.setSize( window.innerWidth, window.innerHeight );
 renderer.physicallyCorrectLights = true;
 renderer.shadowMap.enabled = true;
-renderer.vr.enabled = true;
-// document.body.appendChild( renderer.domElement ); 
-document.body.appendChild( VRButton.createButton( renderer ) );
+//renderer.vr.enabled = true;
+document.body.appendChild( renderer.domElement ); 
+//document.body.appendChild( VRButton.createButton( renderer ) );
 
 const onWindowResize = () => {
     renderer.setSize( window.innerWidth, window.innerHeight );
@@ -31,7 +31,16 @@ window.addEventListener( 'resize', onWindowResize, false );
 
     const controls = new THREE.OrbitControls( camera, renderer.domElement);
     const cubeMat = new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load('textures/brickTex.png'), side: THREE.FrontSide } );
-    const mat = new THREE.MeshLambertMaterial({map: new THREE.TextureLoader().load('textures/metalTex.png'), side: THREE.FrontSide } );
+    const mat = new THREE.MeshPhongMaterial({
+        map: new THREE.TextureLoader().load('textures/metalTex_COLOR.png'), 
+        side: THREE.FrontSide,
+       normalMap: new THREE.TextureLoader().load('textures/metalTex_NRM.png'),
+       bumpMap:  new THREE.TextureLoader().load('textures/metalTex_DISP.png'),
+       bumpScale: 0.8,
+       aoMap: new THREE.TextureLoader().load('textures/metalTex_OCC.png'),
+       aoMapIntensity: 8,
+       shininess: 20, //default is 30
+    });
     const spreadX = -6;
     const spreadR = 150;
     
@@ -57,9 +66,9 @@ window.addEventListener( 'resize', onWindowResize, false );
     camera.position.set(57,-1,58);
     camera.rotation.set(-1,1,9);
     
-   const light1 = new THREE.PointLight('rgb(255,200,255)',10,300);
-   const light2 = new THREE.PointLight('rgb(100,200,255)',10,300);
-   const light3 = new THREE.PointLight( 'rgb(63,140,133)',4,150);
+   const light1 = new THREE.PointLight('rgb(255,200,255)',1200,400);
+   const light2 = new THREE.PointLight('rgb(100,200,255)',1200,400);
+   const light3 = new THREE.PointLight( 'rgb(63,140,133)',500,150*2);
     
     light1.position.set(-300,0,0);
     light2.position.set(300,0,0);
@@ -114,7 +123,7 @@ window.addEventListener( 'resize', onWindowResize, false );
     const pass3 = new THREE.ShaderPass(THREE.BadTVShader);
     //composer.addPass(pass3);
    //strength(0-5),threshold(0 or 1),  
-    const bloomPass = new THREE.UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight),0.3, 0.5, 0.1);
+    const bloomPass = new THREE.UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight),0.6, 0.5, 0.9);
 	composer.addPass(bloomPass);
 
 
@@ -136,7 +145,7 @@ window.addEventListener( 'resize', onWindowResize, false );
           cubeHolder[i].c.rotation.x+=(i*speed)/1000;
        }
        const sin = Math.sin(speed2/8);
-       const ani = map(sin,-1.0,1.0,0,6);
+       const ani = map(sin,-1.0,1.0,0,300);
        light3.intensity = ani;
 
     //    pass3.uniforms.distortion.value += 0.000001;
@@ -145,8 +154,8 @@ window.addEventListener( 'resize', onWindowResize, false );
     }
 
     const Loop = () => {
-        // requestAnimationFrame( Loop );
-        renderer.setAnimationLoop( Loop );
+         requestAnimationFrame( Loop );
+       // renderer.setAnimationLoop( Loop );
         update();
         stats.update(); 
         render();
