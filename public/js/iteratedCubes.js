@@ -10,11 +10,11 @@ var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHe
 var renderer = new THREE.WebGLRenderer({antialias: true});
 
 renderer.setSize( window.innerWidth, window.innerHeight );
-renderer.physicallyCorrectLights = true;
-renderer.shadowMap.enabled = true;
-//renderer.vr.enabled = true;
+ renderer.physicallyCorrectLights = true;
+// renderer.shadowMap.enabled = true;
+
 document.body.appendChild( renderer.domElement ); 
-//document.body.appendChild( VRButton.createButton( renderer ) );
+
 
 const onWindowResize = () => {
     renderer.setSize( window.innerWidth, window.innerHeight );
@@ -22,10 +22,10 @@ const onWindowResize = () => {
     camera.updateProjectionMatrix();
 }
 
-const userDisplay = () => {
-    const id = document.getElementById('userInfo');
-    id.innerText = `Cube Count: ${count}`;
-}
+// const userDisplay = () => {
+//     const id = document.getElementById('userInfo');
+//     id.innerText = `Cube Count: ${count}`;
+// }
 
 window.addEventListener( 'resize', onWindowResize, false );
 
@@ -78,37 +78,7 @@ window.addEventListener( 'resize', onWindowResize, false );
     scene.add(light3);
     let speed2 = 0;
     let speed = 0.022;
-    //update
 
-    /////////////////////////////
-
-    //post processing
-    // const myEffect ={
-    //     uniforms: {
-    //         'tDiffuse': { value: null},
-    //         'amount': { value: 0.0 }
-    //     },
-    //     vertexShader: [
-    //         `varying vec2 vUv;`,
-    //         `void main() {`,
-    //         `vUv = uv;`,
-    //         `gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);`,
-    //         `}`
-    //     ].join("\n"),
-    //     fragmentShader: [
-    //         `uniform float amount;`,
-    //         'uniform sampler2D tDiffuse;',
-    //         'varying vec2 vUv;',
-    //         `void main() {`,
-    //             `vec4 color = texture2D( tDiffuse, vUv );`,
-    //             `vec3 c = color.rgb;`,
-    //             `color.r = c.r * 2.0;`,
-    //             `color.g = c.g + amount;`,
-    //             `color.b = c.b;`,
-    //             `gl_FragColor = vec4( color.rgb, color.a );`,
-    //         `}`
-    //     ].join("\n")
-    // }
 
     const composer = new THREE.EffectComposer(renderer);
     const renderPass = new THREE.RenderPass(scene, camera);
@@ -134,31 +104,50 @@ window.addEventListener( 'resize', onWindowResize, false );
         //renderer.render( scene, camera );
         composer.render();
     };
-
+    let toggleDisplay = false;
+   
+    const id = document.getElementById('userInfo');
+    const display = document.getElementsByClassName('userDisplay');
+    id.innerText = `Cube Count: ${count}`;
+    document.body.onkeyup = function(e){
+        if(e.keyCode == 32){
+            toggleDisplay = !toggleDisplay;
+            console.log(toggleDisplay);
+            }
+        }
+     
+    const userSpeed = document.getElementById('userSpeed');
+    const userLightSpeed = document.getElementById('userLightSpeed');
+    const hideStats = document.getElementById('stats');
     const update = () => {
     
         speed2 = speed2 + 1;
        
        for(let i=0;i<count;i++) {
-          cubeHolder[i].c.rotation.y+=(i*speed)/1000;
-          cubeHolder[i].c.rotation.z+=(i*speed)/1000;
-          cubeHolder[i].c.rotation.x+=(i*speed)/1000;
+          cubeHolder[i].c.rotation.y+=(i*speed)/userSpeed.value;
+          cubeHolder[i].c.rotation.z+=(i*speed)/userSpeed.value;
+          cubeHolder[i].c.rotation.x+=(i*speed)/userSpeed.value;
        }
-       const sin = Math.sin(speed2/8);
+       const userSpeed2 = map(userLightSpeed.value,0,100,0,1);
+       const sin = Math.sin(speed2*userSpeed2);
        const ani = map(sin,-1.0,1.0,0,300);
        light3.intensity = ani;
 
-    //    pass3.uniforms.distortion.value += 0.000001;
-    //    pass3.uniforms.distortion2.value += 0.01;
+       if(toggleDisplay === true) {
+        display[0].style.display = 'none';
+        hideStats.style.display = 'none';
+       } else {
+        display[0].style.display = 'block';
+        hideStats.style.display = 'block';
+       }
     
     }
 
     const Loop = () => {
          requestAnimationFrame( Loop );
-       // renderer.setAnimationLoop( Loop );
         update();
         stats.update(); 
         render();
     };
-    userDisplay();
+   
     Loop();

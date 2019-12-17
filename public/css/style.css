@@ -11,20 +11,25 @@ canvas {
     margin-left: 30px;
     margin-top: 60px;
     position: absolute;
+    display: block;
     color: rgba(255,255,255,0.5);
     z-index: 10;
-    text-align: center;
+    text-align: left;
 }
 #Stats {
-    position: absolute;
+   position: absolute;
     margin-left: 30px;
     margin-top: 10px;
     width: 80px;
     height: 48px;
 }
 #mouse{
-    position: absolute;
-    margin-top: 75px;
-    margin-left: 30px;
-    color: rgba(255,255,255,0.5);
+    /* margin-left: 20px; */
+}
+
+label{
+    display: block;
+    margin-top: 6px;
+    color: aqua;
+    opacity: 0.5;
 }
