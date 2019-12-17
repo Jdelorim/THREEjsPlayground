@@ -31,7 +31,7 @@ const main = () => {
     });
     // const cube = new THREE.Mesh(jbox,jmat);
     const spread = 400;
-    const count = 5000;
+    const count = 1000;
     class MyCube {
         constructor(spread) {
             this.c =  new THREE.Mesh((new THREE.BoxBufferGeometry(4,4,4,1,1,1)),jmat);
