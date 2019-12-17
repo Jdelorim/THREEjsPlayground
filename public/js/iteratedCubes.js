@@ -1,5 +1,5 @@
 'use strict'
-
+if(window.location.pathname === '/') {
 console.log('thanks for looking at my demo!');
 
 //FPS
@@ -69,8 +69,8 @@ class MyCube {
     }
     
    
-    // camera.position.set(57,-1,58);
-    // camera.rotation.set(-1,1,9);
+    camera.position.set(57,-1,58);
+    camera.rotation.set(-1,1,9);
     
    const light1 = new THREE.PointLight('rgb(255,200,255)',1200,400);
    const light2 = new THREE.PointLight('rgb(100,200,255)',1200,400);
@@ -158,3 +158,4 @@ class MyCube {
     };
    
     Loop();
+}
