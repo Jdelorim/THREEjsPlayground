@@ -14,9 +14,9 @@ renderer.setSize( window.innerWidth, window.innerHeight );
  renderer.physicallyCorrectLights = true;
 // renderer.shadowMap.enabled = true;
 
-// document.body.appendChild( renderer.domElement ); 
-document.body.appendChild(VRButton.createButton(renderer));
-renderer.vr.enabled = true;
+document.body.appendChild( renderer.domElement ); 
+// document.body.appendChild(VRButton.createButton(renderer));
+// renderer.vr.enabled = true;
 
 
 const onWindowResize = () => {
@@ -150,8 +150,8 @@ class MyCube {
     }
 
     const Loop = () => {
-         //requestAnimationFrame( Loop );
-         renderer.setAnimationLoop(Loop);
+         requestAnimationFrame( Loop );
+        //  renderer.setAnimationLoop(Loop);
         update();
         stats.update(); 
         render();
