@@ -1,4 +1,5 @@
 'use strict'
+
 console.log('thanks for looking at my demo!');
 
 //FPS
@@ -13,7 +14,9 @@ renderer.setSize( window.innerWidth, window.innerHeight );
  renderer.physicallyCorrectLights = true;
 // renderer.shadowMap.enabled = true;
 
-document.body.appendChild( renderer.domElement ); 
+// document.body.appendChild( renderer.domElement ); 
+document.body.appendChild(VRButton.createButton(renderer));
+renderer.vr.enabled = true;
 
 
 const onWindowResize = () => {
@@ -44,12 +47,15 @@ window.addEventListener( 'resize', onWindowResize, false );
     const spreadX = -6;
     const spreadR = 150;
     
-    function MyCube(spreadR) {
+class MyCube {
+    constructor(spreadR) {
         this.c =  new THREE.Mesh((new THREE.BoxBufferGeometry(4,4,4,1,1,1)),mat);
         this.c.position.x = ((Math.random()-0.5)*spreadR);
         this.c.position.y = ((Math.random()-0.5)*spreadR);
         this.c.position.z = ((Math.random()-0.5)*spreadR);
-    } 
+    }
+
+} 
     const map =(value,  min1,  max1,  min2,  max2)=> {
         return min2 + (value - min1) * (max2 - min2) / (max1 - min1);
     }
@@ -63,8 +69,8 @@ window.addEventListener( 'resize', onWindowResize, false );
     }
     
    
-    camera.position.set(57,-1,58);
-    camera.rotation.set(-1,1,9);
+    // camera.position.set(57,-1,58);
+    // camera.rotation.set(-1,1,9);
     
    const light1 = new THREE.PointLight('rgb(255,200,255)',1200,400);
    const light2 = new THREE.PointLight('rgb(100,200,255)',1200,400);
@@ -144,7 +150,8 @@ window.addEventListener( 'resize', onWindowResize, false );
     }
 
     const Loop = () => {
-         requestAnimationFrame( Loop );
+         //requestAnimationFrame( Loop );
+         renderer.setAnimationLoop(Loop);
         update();
         stats.update(); 
         render();
