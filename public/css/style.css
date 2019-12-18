@@ -6,7 +6,35 @@ canvas {
     width: 100%;
     height: 100%;
 }
+.container {
+    margin-right: auto;
+    margin-left: auto;
+    width: 80%;
+}
 
+.title{
+    text-align: center;
+    color: white;
+    margin-top: 50px;
+    
+}
+.links-container{
+    position:absolute;
+}
+.links a{
+    color: rgba(255,255,255,0.3);
+    text-decoration: none;
+    font-size: 30;
+    text-shadow: 2px 2px rgba(0,0,0,0.5);
+    transition: 0.3s;
+    position: relative;
+   
+}
+.links a:hover {
+    color: rgba(255,255,255,0.9);
+    font-size: 40;
+    text-shadow: 2px 2px rgba(0,0,0,0.5);
+}
 .userDisplay {
     margin-left: 30px;
     margin-top: 60px;

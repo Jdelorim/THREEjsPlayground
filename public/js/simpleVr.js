@@ -1,33 +1,36 @@
 'use strict'
 
 
+
+
 const main = () => {
     const scene = new THREE.Scene();
+    const simplex = new SimplexNoise();
     let camera  = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight,0.1,1000);
-    const vr = true;
+    
     const renderer = new THREE.WebGLRenderer({antialias: true});
     renderer.setSize(window.innerWidth, window.innerHeight);
     
     
-    if(vr) {
+    if(renderer.vr.isPresenting()) {
     document.body.appendChild( VRButton.createButton( renderer ) );
     renderer.vr.enabled = true;
     } else {
-    document.body.appendChild( renderer.domElement ); 
+    document.body.appendChild(renderer.domElement); 
     }
 
+    let n3d = simplex.noise3D(1,1,1);
+    console.log(n3d);
 
-
-    
-    const jmat = new THREE.MeshPhongMaterial({
+    const jmat = new THREE.MeshLambertMaterial({
         map: new THREE.TextureLoader().load('textures/metalTex_COLOR.png'), 
         side: THREE.FrontSide,
     //    normalMap: new THREE.TextureLoader().load('textures/metalTex_NRM.png'),
     //    bumpMap:  new THREE.TextureLoader().load('textures/metalTex_DISP.png'),
     //    bumpScale: 0.8,
-    //    aoMap: new THREE.TextureLoader().load('textures/metalTex_OCC.png'),
-    //    aoMapIntensity: 8,
-       shininess: 20, //default is 30
+        aoMap: new THREE.TextureLoader().load('textures/metalTex_OCC.png'),
+        aoMapIntensity: 8,
+        //default is 30
     });
     // const cube = new THREE.Mesh(jbox,jmat);
     const spread = 400;
@@ -59,25 +62,38 @@ const main = () => {
     const map =(value,  min1,  max1,  min2,  max2)=> {
         return min2 + (value - min1) * (max2 - min2) / (max1 - min1);
     }
-let speed = 0;
-const animate = () => { 
-   renderer.setAnimationLoop( function () {
-      speed= speed+1;
+   
+    let speed = 0;
+    //postFx
+    const composer = new THREE.EffectComposer(renderer);
+    const renderPass = new THREE.RenderPass(scene, camera);
+    composer.addPass(renderPass);
+    const bloomPass = new THREE.UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight),0.9, 0.5, 0);
+	composer.addPass(bloomPass);
+    bloomPass.renderToScreen = true;
+   
+   const animate = () => { 
+   renderer.setAnimationLoop( () => {
+      
+       speed= speed+1;
+       
        for(let i =0;i<count;i++) {
         cubeHolder[i].c.rotation.x += (i*0.04)/2000;
         cubeHolder[i].c.rotation.y += (i*.05/2)/2000;
+       
        }
-       light2.intensity = map(Math.sin(speed),-1,1,0,2);
-    //    console.log(light2.intensity);
-        
-        renderer.render( scene, camera );
+       
+       let s1 = map(Math.sin(speed),-1,1,0,2);
+       light2.intensity = s1;
+    
+       composer.render();
     } );
 }
 animate();
 }
  
 
-if(window.location.pathname === '/1' ) {
+if(window.location.pathname === '/2' ) {
     main();
-    console.log('nfdjnvsdnfdsl');
+    
 }

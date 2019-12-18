@@ -1,5 +1,5 @@
 'use strict'
-if(window.location.pathname === '/') {
+if(window.location.pathname === '/1') {
 console.log('thanks for looking at my demo!');
 
 //FPS
@@ -101,8 +101,6 @@ class MyCube {
    //strength(0-5),threshold(0 or 1),  
     const bloomPass = new THREE.UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight),0.6, 0.5, 0.9);
 	composer.addPass(bloomPass);
-
-
     bloomPass.renderToScreen = true;
     
 
@@ -128,7 +126,7 @@ class MyCube {
     const update = () => {
     
         speed2 = speed2 + 1;
-       
+       console.log(speed2);
        for(let i=0;i<count;i++) {
           cubeHolder[i].c.rotation.y+=(i*speed)/userSpeed.value;
           cubeHolder[i].c.rotation.z+=(i*speed)/userSpeed.value;
