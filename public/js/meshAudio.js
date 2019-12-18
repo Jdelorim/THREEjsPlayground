@@ -1,4 +1,6 @@
 'use strict'
+console.log(window.location.pathname);
+
 
 
 let mic, fft, spectrum;
@@ -9,7 +11,9 @@ function setup() {
   mic.start();
   fft = new p5.FFT();
   fft.setInput(mic);
+  if(window.location.pathname === '/3') {
   meshAudio();
+  }
 }
 
 const meshAudio = () => {
@@ -124,14 +128,6 @@ const drawtoScreen = () => {
 }
 
 console.log('hi');
-
-
-
-
-
-
-
-
 
 
 

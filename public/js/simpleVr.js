@@ -22,7 +22,7 @@ const main = () => {
     let n3d = simplex.noise3D(1,1,1);
     console.log(n3d);
 
-    const jmat = new THREE.MeshLambertMaterial({
+    const jmat = new THREE.MeshPhongMaterial({
         map: new THREE.TextureLoader().load('textures/metalTex_COLOR.png'), 
         side: THREE.FrontSide,
     //    normalMap: new THREE.TextureLoader().load('textures/metalTex_NRM.png'),
@@ -86,7 +86,7 @@ const main = () => {
        let s1 = map(Math.sin(speed),-1,1,0,2);
        light2.intensity = s1;
     
-       composer.render();
+       renderer.render( scene, camera );
     } );
 }
 animate();
