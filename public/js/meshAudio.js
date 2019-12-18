@@ -29,14 +29,12 @@ const meshAudio = () => {
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.shadowMap.enabled = true;
     renderer.shadowMapSoft = true;
-    
-
-    if(renderer.vr.isPresenting()) {
+    document.body.appendChild(renderer.domElement); 
+    let vr = true;
+    if(vr === true) {
         document.body.appendChild( VRButton.createButton( renderer ) );
         renderer.vr.enabled = true;
-        } else {
-        document.body.appendChild(renderer.domElement); 
-        }
+    }
     
     const onWindowResize = () => {
         renderer.setSize( window.innerWidth, window.innerHeight );
@@ -85,8 +83,8 @@ const update = () => {
     let s2 = map(Math.sin(speed/100),-1,1,0,1);
     let s3 = map(Math.sin(speed/150),-1,1,0,1);
     let bass = map(spectrum[100],0,150,0,2);
-    let n1 = map(simplex.noise2D((speed/100),(speed/500)),-1,1,-5,5);
-    let n2 = map(simplex.noise2D((speed/100),(speed/1000)),-1,1,-5,5);
+    let n1 = map(simplex.noise2D((speed/70),(speed/200)),-1,1,-5,5);
+    let n2 = map(simplex.noise2D((speed/65),(speed/190)),-1,1,-5,5);
   
     makeRoughBall(sphere,(speed*50),2,2,1,0.5,0.6,0.2);
     sphere.position.x = n1;
