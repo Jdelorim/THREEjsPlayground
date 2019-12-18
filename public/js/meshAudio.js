@@ -27,8 +27,8 @@ const meshAudio = () => {
     let camera  = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight,0.1,1000);
     const renderer = new THREE.WebGLRenderer({antialias: true});
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMapSoft = true;
+    //renderer.shadowMap.enabled = true;
+    //renderer.shadowMapSoft = true;
     document.body.appendChild(renderer.domElement); 
     let vr = true;
     if(vr === true) {
@@ -36,13 +36,13 @@ const meshAudio = () => {
         renderer.vr.enabled = true;
     }
     
-    const onWindowResize = () => {
-        renderer.setSize( window.innerWidth, window.innerHeight );
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-    }
+    // const onWindowResize = () => {
+    //     renderer.setSize( window.innerWidth, window.innerHeight );
+    //     camera.aspect = window.innerWidth / window.innerHeight;
+    //     camera.updateProjectionMatrix();
+    // }
 
-    window.addEventListener( 'resize', onWindowResize, false );
+    // window.addEventListener( 'resize', onWindowResize, false );
     //helper functions
     const simplex = new SimplexNoise(Math.random());
     
@@ -75,7 +75,7 @@ const render = () => {
 }
 let speed =0;
 const update = () => {
-     spectrum = fft.analyze();
+    //  spectrum = fft.analyze();
     
     speed = speed + 1;
     
@@ -103,9 +103,9 @@ const makeRoughBall = (mesh,time, bassFr, treFr, amp, sp1, sp2, sp3) => {
     
     vertex.normalize();
     var distance = (offset + bassFr ) + simplex.noise3D(
-          (vertex.x * i%2) + time * (0.0007)*sp1,
-          (vertex.y * i%2)  + time * (0.0008)*sp2,
-          (vertex.z * i%2)  + time * (0.0009)*sp3
+          (vertex.x ) + time * (0.0007)*sp1,
+          (vertex.y)  + time * (0.0008)*sp2,
+          (vertex.z)  + time * (0.0009)*sp3
     ) * amp * treFr;
     vertex.multiplyScalar(distance);
   });
@@ -116,10 +116,23 @@ const makeRoughBall = (mesh,time, bassFr, treFr, amp, sp1, sp2, sp3) => {
 }
 
 const drawtoScreen = () => {
-    renderer.setAnimationLoop(drawtoScreen);
-    update();
-    stats.update(); 
-    render();
+    renderer.setAnimationLoop(()=>{
+        speed = speed + 1;
+    
+        
+        let n1 = map(simplex.noise2D((speed/300),(speed/200)),-1,1,-5,5);
+        let n2 = map(simplex.noise2D((speed/250),(speed/190)),-1,1,-5,5);
+      
+        makeRoughBall(sphere,(speed*25),2,2,1,0.5,0.6,0.2);
+        sphere.position.x = n1;
+        sphere.position.y = n2;
+        sphere.rotation.x += 0.02;
+        sphere.rotation.z -= (0.01);
+        render();
+    });
+   // update();
+   // stats.update(); 
+    
 }
    
     drawtoScreen();

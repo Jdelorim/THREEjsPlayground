@@ -86,8 +86,8 @@ const main = () => {
        let s1 = map(Math.sin(speed),-1,1,0,2);
        light2.intensity = s1;
     
-    //    renderer.render( scene, camera );
-       composer.render();
+        renderer.render( scene, camera );
+       //composer.render();
     } );
 }
 animate();
