@@ -127,7 +127,7 @@ const drawtoScreen = () => {
         let n1 = map(simplex.noise2D(speed/1090,speed/1000),-1,1,-5,5);
         let n2 = map(simplex.noise2D((speed/1002),(speed/1004)),-1,1,-5,5);
       
-        makeRoughBall(sphere,(speed*0),2,2,1,0.5,0.6,0.2);
+        makeRoughBall(sphere,(speed*20),2,2,1,0.5,0.6,0.2);
         sphere.position.x = n1;
         sphere.position.y = n2;
         sphere.rotation.x += bass;
