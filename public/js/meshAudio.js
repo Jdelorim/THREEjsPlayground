@@ -9,7 +9,9 @@ function setup() {
 
   mic = new p5.AudioIn();
   mic.start();
-  fft = new p5.FFT();
+  //arg is smoothing and bins
+  fft = new p5.FFT(0.9, 512);
+  console.log(fft);
   fft.setInput(mic);
   if(window.location.pathname === '/3') {
   meshAudio();
@@ -74,27 +76,27 @@ const render = () => {
     renderer.render(scene, camera);
 }
 let speed =0;
-const update = () => {
-    //  spectrum = fft.analyze();
+// const update = () => {
+//       spectrum = fft.analyze();
     
-    speed = speed + 1;
+//     speed = speed + 1;
     
-    let s1 = map(Math.sin(speed/200),-1,1,0,5);
-    let s2 = map(Math.sin(speed/100),-1,1,0,1);
-    let s3 = map(Math.sin(speed/150),-1,1,0,1);
-    let bass = map(spectrum[100],0,150,0,2);
-    let n1 = map(simplex.noise2D((speed/70),(speed/200)),-1,1,-5,5);
-    let n2 = map(simplex.noise2D((speed/65),(speed/190)),-1,1,-5,5);
+//     let s1 = map(Math.sin(speed/200),-1,1,0,5);
+//     let s2 = map(Math.sin(speed/100),-1,1,0,1);
+//     let s3 = map(Math.sin(speed/150),-1,1,0,1);
+//     let bass = map(spectrum[100],0,150,0,2);
+//     let n1 = map(simplex.noise2D((speed/70),(speed/200)),-1,1,-5,5);
+//     let n2 = map(simplex.noise2D((speed/65),(speed/190)),-1,1,-5,5);
   
-    makeRoughBall(sphere,(speed*50),2,2,1,0.5,0.6,0.2);
-    sphere.position.x = n1;
-    sphere.position.y = n2;
-    sphere.rotation.x += 0.02;
-    sphere.rotation.z -= (0.01);
+//     makeRoughBall(sphere,(speed*50),2,2,1,0.5,0.6,0.2);
+//     sphere.position.x = n1;
+//     sphere.position.y = n2;
+//     sphere.rotation.x += 0.02;
+//     sphere.rotation.z -= (0.01);
    
-    // console.log(bass);
+//      console.log(bass);
   
-}
+// }
   
 const makeRoughBall = (mesh,time, bassFr, treFr, amp, sp1, sp2, sp3) => { 
     
@@ -117,17 +119,19 @@ const makeRoughBall = (mesh,time, bassFr, treFr, amp, sp1, sp2, sp3) => {
 
 const drawtoScreen = () => {
     renderer.setAnimationLoop(()=>{
-        speed = speed + 1;
-    
+        spectrum = fft.analyze();
         
-        let n1 = map(simplex.noise2D((speed/300),(speed/200)),-1,1,-5,5);
-        let n2 = map(simplex.noise2D((speed/250),(speed/190)),-1,1,-5,5);
+        speed = speed + 1;
+        let bass = map(spectrum[50], 0, 256, 0, .1);
+        console.log(bass);
+        let n1 = map(simplex.noise2D(speed/1090,speed/1000),-1,1,-5,5);
+        let n2 = map(simplex.noise2D((speed/1002),(speed/1004)),-1,1,-5,5);
       
-        makeRoughBall(sphere,(speed*25),2,2,1,0.5,0.6,0.2);
+        makeRoughBall(sphere,(speed*0),2,2,1,0.5,0.6,0.2);
         sphere.position.x = n1;
         sphere.position.y = n2;
-        sphere.rotation.x += 0.02;
-        sphere.rotation.z -= (0.01);
+        sphere.rotation.x += bass;
+        sphere.rotation.z -= bass;
         render();
     });
    // update();
