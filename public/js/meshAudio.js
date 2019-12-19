@@ -132,6 +132,7 @@ const drawtoScreen = () => {
         sphere.position.y = n2;
         sphere.rotation.x += bass;
         sphere.rotation.z -= bass;
+        stats.update();
         render();
     });
    // update();
