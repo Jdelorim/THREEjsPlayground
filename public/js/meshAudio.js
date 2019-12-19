@@ -17,9 +17,19 @@ function setup() {
   meshAudio();
   }
 }
+const startAudio = () => {
+    console.log('audio started');
+    if (getAudioContext().state !== 'running') {
+        getAudioContext().resume();
+    }
+}
+
+
+
 
 const meshAudio = () => {
-    //fft
+    //audio
+   
     //fps 
     const stats = new Stats();
     document.body.appendChild(stats.domElement); 
@@ -38,13 +48,13 @@ const meshAudio = () => {
         renderer.vr.enabled = true;
     }
     
-    // const onWindowResize = () => {
-    //     renderer.setSize( window.innerWidth, window.innerHeight );
-    //     camera.aspect = window.innerWidth / window.innerHeight;
-    //     camera.updateProjectionMatrix();
-    // }
+    const onWindowResize = () => {
+        renderer.setSize( window.innerWidth, window.innerHeight );
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+    }
 
-    // window.addEventListener( 'resize', onWindowResize, false );
+    window.addEventListener( 'resize', onWindowResize, false );
     //helper functions
     const simplex = new SimplexNoise(Math.random());
     
@@ -76,27 +86,7 @@ const render = () => {
     renderer.render(scene, camera);
 }
 let speed =0;
-// const update = () => {
-//       spectrum = fft.analyze();
-    
-//     speed = speed + 1;
-    
-//     let s1 = map(Math.sin(speed/200),-1,1,0,5);
-//     let s2 = map(Math.sin(speed/100),-1,1,0,1);
-//     let s3 = map(Math.sin(speed/150),-1,1,0,1);
-//     let bass = map(spectrum[100],0,150,0,2);
-//     let n1 = map(simplex.noise2D((speed/70),(speed/200)),-1,1,-5,5);
-//     let n2 = map(simplex.noise2D((speed/65),(speed/190)),-1,1,-5,5);
-  
-//     makeRoughBall(sphere,(speed*50),2,2,1,0.5,0.6,0.2);
-//     sphere.position.x = n1;
-//     sphere.position.y = n2;
-//     sphere.rotation.x += 0.02;
-//     sphere.rotation.z -= (0.01);
-   
-//      console.log(bass);
-  
-// }
+
   
 const makeRoughBall = (mesh,time, bassFr, treFr, amp, sp1, sp2, sp3) => { 
     
@@ -105,9 +95,9 @@ const makeRoughBall = (mesh,time, bassFr, treFr, amp, sp1, sp2, sp3) => {
     
     vertex.normalize();
     var distance = (offset + bassFr ) + simplex.noise3D(
-          (vertex.x ) + time * (0.0007)*sp1,
-          (vertex.y)  + time * (0.0008)*sp2,
-          (vertex.z)  + time * (0.0009)*sp3
+          (vertex.x ) + (time * sp1) * (0.0007),
+          (vertex.y)  + (time * sp2) * (0.0008),
+          (vertex.z)  + (time * sp3) * (0.0009)
     ) * amp * treFr;
     vertex.multiplyScalar(distance);
   });
@@ -117,17 +107,24 @@ const makeRoughBall = (mesh,time, bassFr, treFr, amp, sp1, sp2, sp3) => {
   mesh.geometry.computeFaceNormals();
 }
 
+const slider1 = document.getElementById('jSlider1');
+const slider2 = document.getElementById('jSlider2');
+const slider3 = document.getElementById('jSlider3');
+
 const drawtoScreen = () => {
     renderer.setAnimationLoop(()=>{
         spectrum = fft.analyze();
         
         speed = speed + 1;
         let bass = map(spectrum[50], 0, 256, 0, .1);
-        console.log(bass);
+        // console.log(bass);
         let n1 = map(simplex.noise2D(speed/1090,speed/1000),-1,1,-5,5);
         let n2 = map(simplex.noise2D((speed/1002),(speed/1004)),-1,1,-5,5);
-      
-        makeRoughBall(sphere,(speed*20),2,2,1,0.5,0.6,0.2);
+        let sl1 = map(slider1.value,0,100,0,4);
+        let sl2 = map(slider2.value,0,100,0,4);
+        let sl3 = map(slider3.value,0,100,0,4);
+        console.log(sl1,sl2,sl3);
+        makeRoughBall(sphere,(speed*20),2,2,1, sl1, sl2, sl3);
         sphere.position.x = n1;
         sphere.position.y = n2;
         sphere.rotation.x += bass;
@@ -144,7 +141,3 @@ const drawtoScreen = () => {
 }
 
 console.log('hi');
-
-
-
-
