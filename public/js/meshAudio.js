@@ -143,17 +143,17 @@ const drawtoScreen = () => {
        jLmat.wireframe = wir;
       
     
-        speed = window.performance.now();
+        speed = speed + 1;
         let sl2 = map(slider2.value,0,100,0,1);
         let sl1 = map(slider1.value, 0,100, 0,0.09);
-        let sl3 = map(slider3.value, 0, 100, 0, 1);
-        let n1 = map(simplex.noise2D(speed/5000,speed/3000),-1,1,-5,5);
-        let n2 = map(simplex.noise2D((speed/4000),(speed/2004)),-1,1,-5,5);
+        // let sl3 = map(slider3.value, 0, 100, 0, 5000);
+        let n1 = map(simplex.noise2D(speed*0.002,speed/3000),-1,1,-5,5);
+        let n2 = map(simplex.noise2D((speed*0.003),(speed/2004)),-1,1,-5,5);
         makeRoughBall(sphere,speed,sl2*3,sl2*2,1, 0,0, 0);
          
         
-        sphere.position.x = n1*sl3;
-        sphere.position.y = n2*sl3;
+        sphere.position.x = n1;
+        sphere.position.y = n2;
         sphere.rotation.x += sl1;
         sphere.rotation.z += sl1+0.005;
         stats.update();
