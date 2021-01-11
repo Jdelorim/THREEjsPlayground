@@ -47,7 +47,7 @@ const meshAudio = () => {
     let vr = true;
     if(vr === true) {
         document.body.appendChild( VRButton.createButton( renderer ) );
-        renderer.vr.enabled = true;
+        renderer.xr.enabled = true;
     }
     
     const onWindowResize = () => {
@@ -116,9 +116,6 @@ const makeRoughBall = (mesh,time, bassFr, treFr, amp, sp1, sp2, sp3) => {
  const slider2 = document.getElementById('jSlider2');
  const slider3 = document.getElementById('jSlider3');
 
-
-
-
 const drawtoScreen = () => {
     renderer.setAnimationLoop(()=>{
         // spectrum = fft.analyze();
@@ -151,17 +148,14 @@ const drawtoScreen = () => {
         let n2 = map(simplex.noise2D((speed*0.003),(speed/2004)),-1,1,-5,5);
         makeRoughBall(sphere,speed*12,sl2*3,sl2*2,1, 0,0, 0);
          
-        
         sphere.position.x = n1;
         sphere.position.y = n2;
         sphere.rotation.x += sl1;
         sphere.rotation.z += sl1+0.005;
         stats.update();
         render();    
+    
     });
-    
-   
-    
 }
    
     drawtoScreen();

@@ -15,8 +15,8 @@ renderer.setSize( window.innerWidth, window.innerHeight );
 // renderer.shadowMap.enabled = true;
 
 document.body.appendChild( renderer.domElement ); 
-// document.body.appendChild(VRButton.createButton(renderer));
-// renderer.vr.enabled = true;
+document.body.appendChild(VRButton.createButton(renderer));
+renderer.xr.enabled = true;
 
 
 const onWindowResize = () => {
@@ -105,8 +105,8 @@ class MyCube {
     
 
     const render = () => {
-        //renderer.render( scene, camera );
-        composer.render();
+        renderer.render( scene, camera );
+        //composer.render();
     };
     let toggleDisplay = false;
    
@@ -126,7 +126,7 @@ class MyCube {
     const update = () => {
     
         speed2 = speed2 + 1;
-       console.log(speed2);
+       //console.log(speed2);
        for(let i=0;i<count;i++) {
           cubeHolder[i].c.rotation.y+=(i*speed)/userSpeed.value;
           cubeHolder[i].c.rotation.z+=(i*speed)/userSpeed.value;
@@ -148,8 +148,8 @@ class MyCube {
     }
 
     const Loop = () => {
-         requestAnimationFrame( Loop );
-        //  renderer.setAnimationLoop(Loop);
+        // requestAnimationFrame( Loop );
+        renderer.setAnimationLoop(Loop);
         update();
         stats.update(); 
         render();
