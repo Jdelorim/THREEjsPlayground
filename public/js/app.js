@@ -13,6 +13,7 @@ console.log('hi');
         script.src='//mrdoob.github.io/stats.js/build/stats.min.js';
         document.head.appendChild(script);
     })()
+    
 const scene = new THREE.Scene();
 var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 var renderer = new THREE.WebGLRenderer({antialias: true});

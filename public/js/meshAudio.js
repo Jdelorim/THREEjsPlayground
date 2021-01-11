@@ -24,7 +24,7 @@
 //     }
 // }
 
-let wir = false;
+let wir = true;
 const wireFrame = () => {
     wir = !wir;
 }
@@ -149,7 +149,7 @@ const drawtoScreen = () => {
         // let sl3 = map(slider3.value, 0, 100, 0, 5000);
         let n1 = map(simplex.noise2D(speed*0.002,speed/3000),-1,1,-5,5);
         let n2 = map(simplex.noise2D((speed*0.003),(speed/2004)),-1,1,-5,5);
-        makeRoughBall(sphere,speed,sl2*3,sl2*2,1, 0,0, 0);
+        makeRoughBall(sphere,speed*12,sl2*3,sl2*2,1, 0,0, 0);
          
         
         sphere.position.x = n1;
